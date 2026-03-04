@@ -1,0 +1,41 @@
+@import url('../static/variables.css');
+
+/* Estilo para meus-pedidos.html */
+.meus-pedidos-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: rgba(107, 44, 27, 0.95);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  padding: 2rem;
+}
+.meus-pedidos-container h1 {
+  color: var(--color-accent);
+  margin-bottom: 1.5rem;
+}
+.meus-pedidos-container table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-dark);
+  margin-bottom: 2rem;
+}
+.meus-pedidos-container th, .meus-pedidos-container td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+.meus-pedidos-container th {
+  background: var(--color-secondary);
+  color: var(--color-light);
+}
+.meus-pedidos-container tr:last-child td {
+  border-bottom: none;
+}
+.meus-pedidos-container a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.meus-pedidos-container a:hover {
+  color: var(--color-secondary);
+}

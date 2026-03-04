@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Usuários -  SUA-MARCA-AQUI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin_usuarios.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+</head>
+<body>
+  <div class="nature-bg"></div>
+  <div class="nature-grid"></div>
+
+  <header class="admin-header">
+    <h1>Gestão de Usuários</h1>
+    <nav class="admin-nav">
+      <a href="{{ url_for('admin_produtos') }}" class="btn-voltar">Produtos</a>
+  <a href="{{ url_for('admin_categorias') }}" class="btn-voltar">Categorias</a>
+  <a href="{{ url_for('home') }}" class="btn-voltar">Home</a>
+    </nav>
+  </header>
+
+  <!-- Modal de Aviso/Confirmação para Usuários -->
+  <div id="modal-aviso-usuario" class="modal-aviso" style="display:none;">
+    <div class="modal-aviso-content">
+      <span id="modal-aviso-usuario-msg"></span>
+      <div id="modal-aviso-usuario-btns">
+        <button id="modal-aviso-usuario-ok" class="btn-fechar-modal">OK</button>
+      </div>
+    </div>
+  </div>
+  <main class="admin-container">
+    {% if usuarios %}
+    <div class="users-grid">
+      {% for u in usuarios %}
+      <article class="user-card">
+        <header class="user-card-header">
+          <div class="user-info">
+            <span class="user-name">{{ u[1] }}</span>
+            <span class="user-id">#{{ u[0] }}</span>
+          </div>
+          <span class="status-badge {% if u[5] %}status-banido{% else %}status-ativo{% endif %}">
+            {{ 'Banido' if u[5] else 'Ativo' }}
+          </span>
+        </header>
+        
+        <div class="user-card-body">
+          <div class="info-group">
+            <label>Email:</label>
+            <span>{{ u[2] }}</span>
+          </div>
+          <div class="info-group">
+            <label>Telefone:</label>
+            <span>{{ u[3] }}</span>
+          </div>
+          <div class="info-group">
+            <label>Admin:</label>
+            <span>{{ 'Sim' if u[4] else 'Não' }}</span>
+          </div>
+        </div>
+
+        <div class="user-card-footer">
+          <div class="btn-group">
+              <button type="button" class="btn-remover" data-id="{{ u[0] }}" title="Remover usuário">
+                <span class="icon">🗑️</span> Remover
+              </button>
+              {% if not u[4] %}  <!-- Se não for admin -->
+                <button type="button" class="{% if not u[5] %}btn-banir{% else %}btn-desbanir{% endif %}" 
+                        data-id="{{ u[0] }}"
+                        title="{{ 'Banir usuário' if not u[5] else 'Desbanir usuário' }}">
+                  <span class="icon">{{ '🚫' if not u[5] else '✅' }}</span>
+                  {{ 'Banir' if not u[5] else 'Desbanir' }}
+                </button>
+              {% endif %}
+            </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>Nenhum usuário cadastrado.</p>
+    {% endif %}
+  </main>
+
+  <script>
+    // Modal customizado para avisos e confirmações em usuários
+    function showModalAvisoUsuario(msg, cb) {
+      const modal = document.getElementById('modal-aviso-usuario');
+      const msgSpan = document.getElementById('modal-aviso-usuario-msg');
+      const btnsDiv = document.getElementById('modal-aviso-usuario-btns');
+      msgSpan.textContent = msg;
+      btnsDiv.innerHTML = '<button id="modal-aviso-usuario-ok" class="btn-fechar-modal">OK</button>';
+      modal.style.display = 'flex';
+      document.getElementById('modal-aviso-usuario-ok').onclick = function() {
+        modal.style.display = 'none';
+        if (cb) cb();
+      };
+    }
+    function showModalConfirmUsuario(msg, cbYes, cbNo) {
+      const modal = document.getElementById('modal-aviso-usuario');
+      const msgSpan = document.getElementById('modal-aviso-usuario-msg');
+      const btnsDiv = document.getElementById('modal-aviso-usuario-btns');
+      msgSpan.textContent = msg;
+      btnsDiv.innerHTML = '<button id="modal-usuario-sim" class="btn-fechar-modal">Sim</button> <button id="modal-usuario-nao" class="btn-fechar-modal">Não</button>';
+      modal.style.display = 'flex';
+      document.getElementById('modal-usuario-sim').onclick = function() {
+        modal.style.display = 'none';
+        if (cbYes) cbYes();
+      };
+      document.getElementById('modal-usuario-nao').onclick = function() {
+        modal.style.display = 'none';
+        if (cbNo) cbNo();
+      };
+    }
+    // Função para gerenciar banimento/desbanimento
+    document.querySelectorAll('.btn-banir, .btn-desbanir').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const userId = this.dataset.id;
+        const isBanir = this.classList.contains('btn-banir');
+        const action = isBanir ? 'ban' : 'unban';
+        const confirmMsg = isBanir ?
+          'Tem certeza que deseja banir este usuário?' :
+          'Tem certeza que deseja remover o banimento deste usuário?';
+        showModalConfirmUsuario(confirmMsg, () => {
+          fetch(`/admin/usuario/${action}/${userId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token() }}'
+            }
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Erro na requisição');
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.message) {
+              showModalAvisoUsuario(data.message, () => location.reload());
+            } else {
+              throw new Error(data.error || 'Erro desconhecido');
+            }
+          })
+          .catch(error => {
+            console.error('Erro:', error);
+            showModalAvisoUsuario(`Erro ao ${isBanir ? 'banir' : 'desbanir'} usuário: ${error.message}`);
+          });
+        });
+      });
+    });
+    // Função para remover usuário
+    document.querySelectorAll('.btn-remover').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const id = this.dataset.id;
+        if(!id) return;
+        showModalConfirmUsuario('Deseja realmente remover este usuário?', () => {
+          fetch(`/admin/usuario/${id}`, {
+            method: 'DELETE',
+            headers: { 
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token() }}'
+            }
+          })
+          .then(res => {
+            if (!res.ok) {
+              return res.json().then(err => Promise.reject(err));
+            }
+            return res.json();
+          })
+          .then((data) => { 
+            showModalAvisoUsuario(data.message, () => location.reload());
+          })
+          .catch(err => {
+            console.error('Erro:', err);
+            showModalAvisoUsuario('Erro ao remover: ' + (err.error || err.message || 'Erro desconhecido'));
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

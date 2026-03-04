@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+        <meta charset="UTF-8">
+        <title>Finalizar Compra SUA-MARCA-AQUI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/finalizar_compra.css">
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+</head>
+<body>
+    <div class="tech-bg"></div>
+    <div class="tech-grid"></div>
+    <div class="finalizar-container">
+        <h1 style="color: aliceblue;">Finalizar Compra</h1>
+        <form class="finalizar-form" id="finalizarForm" method="post" autocomplete="off">
+            <label for="nome"><span class="input-icon">👤</span> Nome completo <span style="color:var(--color-red,#b71c1c);">*</span></label>
+            <input type="text" name="nome" id="nome" required placeholder="Seu nome completo">
+            <label for="numero"><span class="input-icon">#️⃣</span> Número da residência <span style="color:var(--color-red,#b71c1c);">*</span></label>
+            <input type="text" name="numero" id="numero" required placeholder="Ex: 123 ou Apto 45">
+            <label for="endereco"><span class="input-icon">🏠</span> Endereço <span style="color:var(--color-red,#b71c1c);">*</span></label>
+            <input type="text" name="endereco" id="endereco" required placeholder="Rua, complemento">
+            <label for="cidade"><span class="input-icon">🏙️</span> Cidade <span style="color:var(--color-red,#b71c1c);">*</span></label>
+            <input type="text" name="cidade" id="cidade" required placeholder="Ex: Campina Grande">
+            <label for="estado"><span class="input-icon">🌎</span> Estado <span style="color:var(--color-red,#b71c1c);">*</span></label>
+            <input type="text" name="estado" id="estado" required placeholder="Ex: PB">
+            <label for="cep"><span class="input-icon">🏷️</span> CEP <span style="color:var(--color-red,#b71c1c);">*</span></label>
+            <div class="cep-container">
+                <input type="text" name="cep" id="cep" required maxlength="9" pattern="\d{5}-?\d{3}" placeholder="Ex: 58000-000">
+                <button type="button" onclick="calcularFrete()" class="btn-calcular-frete">Calcular Frete</button>
+            </div>
+            <div id="resultado-frete" class="resultado-frete"></div>
+            <button type="submit" class="btn-finalizar">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" class="whatsapp-icon" alt="WhatsApp">
+                Finalizar Pedido via WhatsApp
+            </button>
+        </form>
+        <a href="/carrinho" class="voltar-link">Voltar ao carrinho</a>
+    </div>
+    <script>
+    function calcularFrete() {
+        const cep = document.getElementById('cep').value.replace(/\D/g, '');
+        if (cep.length !== 8) {
+            document.getElementById('resultado-frete').innerText = 'Digite um CEP válido (8 dígitos)';
+            return;
+        }
+        document.getElementById('resultado-frete').innerText = 'Calculando...';
+
+        fetch(`https://lojinha-frete-api.deno.dev/frete?origem=58400000&destino=${cep}&peso=1&valor=100`)
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.correios) {
+                    let txt = '';
+                    let menorValor = Infinity;
+                    for (const servico in data.correios) {
+                        const valorFrete = parseFloat(data.correios[servico].valor);
+                        txt += `${servico}: R$ ${valorFrete.toFixed(2)} - ${data.correios[servico].prazo} dias\n`;
+                        if (valorFrete < menorValor) {
+                            menorValor = valorFrete;
+                        }
+                    }
+                    sessionStorage.setItem('valorFreteSimulado', menorValor.toString());
+                    document.getElementById('resultado-frete').innerText = txt;
+                } else {
+                    simularFreteLocal(cep);
+                }
+            })
+            .catch(() => simularFreteLocal(cep));
+    }
+
+    function simularFreteLocal(cep) {
+        const origem = 58400000;
+        const destino = parseInt(cep);
+        let distancia = Math.abs(destino - origem);
+        let valor = 19.9 + Math.floor(distancia / 100000) * 7;
+        let prazo = 3 + Math.floor(distancia / 200000);
+        if (valor > 59) valor = 59.9;
+        if (prazo > 12) prazo = 12;
+        let txt = `PAC: R$ ${valor.toFixed(2)} - ${prazo} dias\nSEDEX: R$ ${(valor+12).toFixed(2)} - ${Math.max(1,prazo-2)} dias`;
+        sessionStorage.setItem('valorFreteSimulado', valor.toString());
+        document.getElementById('resultado-frete').innerText = txt;
+    }
+
+    document.getElementById('finalizarForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Verifica se o frete foi calculado
+        const freteCalculado = sessionStorage.getItem('valorFreteSimulado');
+        if (!freteCalculado) {
+            alert('Por favor, calcule o frete antes de finalizar a compra.');
+            return;
+        }
+
+        // Busca os itens do carrinho no momento do clique
+        fetch('/carrinho', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(r => r.json())
+            .then(data => {
+                const carrinhoItens = data.carrinho || [];
+                let totalCarrinho = data.total || 0;
+                // Pega o valor do frete e converte para número
+                let valorFrete = parseFloat(sessionStorage.getItem('valorFreteSimulado')) || 0;
+
+                const nome = document.getElementById('nome').value;
+                const numero = document.getElementById('numero').value;
+                const endereco = document.getElementById('endereco').value;
+                const cidade = document.getElementById('cidade').value;
+                const estado = document.getElementById('estado').value;
+                const cep = document.getElementById('cep').value;
+
+                // Monta resumo dos produtos
+                let produtosMsg = '';
+                let total = 0;
+                if (carrinhoItens.length > 0) {
+                    produtosMsg += 'Produtos:\n';
+                    carrinhoItens.forEach(item => {
+                        const subtotal = item.preco * item.quantidade;
+                        produtosMsg += `- ${item.nome} (Qtd: ${item.quantidade}) - R$ ${item.preco.toFixed(2)} x ${item.quantidade} = R$ ${subtotal.toFixed(2)}\n`;
+                        total += subtotal;
+                    });
+                    produtosMsg += `Total produtos: R$ ${total.toFixed(2)}\n`;
+                }
+
+                // Frete
+                let freteMsg = '';
+                // Como já convertemos o valorFrete para número anteriormente, a verificação fica mais simples
+                if (valorFrete > 0) {
+                    freteMsg = `Frete: R$ ${valorFrete.toFixed(2)}\n`;
+                    total += valorFrete; // Adiciona o frete ao total
+                }
+
+                // Mensagem completa
+                let msg = `Olá! Quero finalizar minha compra.\n\n`;
+                msg += produtosMsg;
+                msg += freteMsg;
+                msg += `Valor total: R$ ${total.toFixed(2)}\n\n`;
+                msg += `Nome: ${nome}\nNúmero: ${numero}\nEndereço: ${endereco}\nCidade: ${cidade}\nEstado: ${estado}\nCEP: ${cep}`;
+
+                // Número novo do vendedor
+                const fone = '55#SEU-NUMERO-AQUI'; // número atualizado
+                // URL ajustada para garantir envio da mensagem
+                const url = `https://api.whatsapp.com/send?phone=${fone}&text=${encodeURIComponent(msg)}`;
+                window.open(url, '_blank');
+            });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!-- Template para detalhes do pedido -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Pedido</title>
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="stylesheet" href="/static/pedido.css">
+</head>
+<body>
+    <h1>Detalhes do Pedido #{{ pedido[0] }}</h1>
+    <p><strong>Data:</strong> {{ pedido[1] }}</p>
+    <p><strong>Status:</strong> {{ pedido[2] }}</p>
+    <p><strong>Valor Total:</strong> R$ {{ '%.2f'|format(pedido[-1]) }}</p>
+    <p><strong>Endereço:</strong> {{ pedido[5] }}, {{ pedido[6] }}-{{ pedido[7] }}, {{ pedido[8] }}</p>
+    <h2>Itens do Pedido</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Imagem</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in itens %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{% if item[1] %}<img src="/{{ item[1] }}" alt="{{ item[0] }}" width="50">{% endif %}</td>
+                <td>{{ item[2] }}</td>
+                <td>R$ {{ '%.2f'|format(item[3]) }}</td>
+                <td>R$ {{ '%.2f'|format(item[4]) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('meus_pedidos') }}">Voltar para Meus Pedidos</a>
+</body>
+</html>

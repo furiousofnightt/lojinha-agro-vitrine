@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nós - SUA-MARCA | Nossa História e Valores</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Conheça a história da SUA-MARCA, nossa missão, visão e valores. Desde 2020 oferecendo as melhores soluções em hardware e tecnologia.">
+    <meta name="keywords" content="sobre SUA-MARCA?, história SUA-MARCA, missão, visão, valores, Ração, Distribuidora, Agro, João Pessoa, PB">
+    <meta name="author" content="SUA-MARCA">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://SUA-MARCA.com.br/sobre">
+    <meta property="og:title" content="Sobre Nós - SUA-MARCA | Nossa História e Valores">
+    <meta property="og:description" content="Conheça a história da SUA-MARCA, nossa missão, visão e valores. Excelência em tecnologia desde 2020.">
+    <meta property="og:image" content="{{ url_for('static', filename='images/logo.png') }}">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sobre Nós - SUA-MARCA">
+    <meta name="twitter:description" content="Conheça nossa história, missão, visão e valores.">
+    <meta name="twitter:image" content="{{ url_for('static', filename='images/logo.png') }}">
+
+    <!-- Preload -->
+    <link rel="preload" href="{{ url_for('static', filename='sobre.css') }}" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
+
+    <!-- Estilos -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sobre.css') }}">
+
+    <!-- Estilos de teste sem url -->
+    <link rel="stylesheet" href="../static/sobre.css">
+</head>
+<body>
+    <div class="tech-bg"></div>
+    <a href="{{ url_for('home') }}" class="btn-voltar">Voltar</a>
+
+    <main class="sobre-section">
+        <h1 class="sobre-title">Sobre a SUA-MARCA</h1>
+
+<div class="sobre-content">
+    <h2 class="sobre-subtitle">Nossa História</h2>
+    <p class="sobre-text">
+        Desde 2020, a&nbsp;SUA-MARCA vem se destacando no setor agropecuário, fornecendo produtos de alta qualidade para o cuidado e nutrição animal. Com a linha PRO HORSE – Ração dos Campeões, oferecemos alimentos balanceados e confiáveis para cavalos e outros animais de grande porte.
+    </p>
+
+    <p class="sobre-text">
+        Nosso compromisso é apoiar produtores e criadores com soluções que aumentem o bem-estar e o desempenho dos animais. Cada produto é selecionado com rigor, garantindo nutrição completa e resultados comprovados.
+    </p>
+
+    <div class="mission-values">
+        <div class="value-card">
+            <h3 class="value-title">Missão</h3>
+            <p>Fornecer rações de alta qualidade e produtos agropecuários confiáveis, promovendo a saúde, força e desempenho dos animais, com atendimento personalizado e suporte técnico aos nossos clientes.</p>
+        </div>
+
+        <div class="value-card">
+            <h3 class="value-title">Visão</h3>
+            <p>Ser reconhecida nacionalmente como a distribuidora de referência em produtos agropecuários, especialmente na linha PRO HORSE – Ração dos Campeões, sempre inovando e garantindo a satisfação dos criadores e produtores.</p>
+        </div>
+
+        <div class="value-card">
+            <h3 class="value-title">Valores</h3>
+            <p>• Qualidade superior em cada produto<br>
+            • Compromisso com a saúde animal<br>
+            • Transparência e confiança nas relações<br>
+            • Inovação constante no setor agro<br>
+            • Atendimento personalizado ao cliente</p>
+        </div>
+
+        <div class="value-card">
+        <h3 class="value-title">Compromisso com os Animais</h3>
+        <p>Garantir que cada produto oferecido pela PRO HORSE seja seguro, nutritivo e de alta qualidade, contribuindo para a saúde e bem-estar dos animais, fortalecendo a confiança de nossos clientes e parceiros.</p>
+        </div>
+    </div>
+</div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <small class="copyright">&copy; 2025 SUA-MARCA
+        
+            </small>
+            <div class="footer-links">
+                <a href="{{ url_for('sobre') }}">Sobre</a>
+                <a href="{{ url_for('privacidade') }}">Privacidade</a>
+                <a href="{{ url_for('termos') }}">Termos</a>
+                <a href="{{ url_for('contato') }}">Contato</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

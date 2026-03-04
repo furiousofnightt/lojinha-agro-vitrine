@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha -  SUA-MARCA-AQUI</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='redefinir-senha.css') }}">
+
+    <!-- Estilos de teste sem url -->
+    <link rel="stylesheet" href="../static/redefinir-senha.css">
+</head>
+<body>
+    <!-- Background -->
+    <div class="tech-bg"></div>
+    
+    <!-- Botão Voltar -->
+    <a href="{{ url_for('login') }}" class="btn-voltar">Voltar</a>
+
+    <!-- Container Principal -->
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="card">
+
+                        <!-- Logo e Título -->
+                        <div class="header">
+                                <img src="{{ url_for('static', filename='images/#SUA-LOGO-AQUI') }}" alt="#SUA-LOGO-AQUI" class="logo">
+                                <h1>Recuperar Senha</h1>
+                                <p>Por favor, confirme seus dados para recuperar sua senha</p>
+                        </div>
+
+            <!-- Formulário -->
+            <form class="form" action="{{ url_for('redefinir_senha') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-grupo">
+                    <label for="usuario">Nome de Usuário</label>
+                    <input type="text" id="usuario" name="usuario" required minlength="3" maxlength="100" autocomplete="username">
+                </div>
+
+                <div class="form-grupo">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required maxlength="100" autocomplete="email">
+                </div>
+
+                <div class="form-grupo">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" required maxlength="15" placeholder="(99) 99999-9999">
+                </div>
+
+                <div class="form-grupo">
+                    <label for="pergunta">Pergunta de Segurança</label>
+                    <select id="pergunta" name="pergunta" required>
+                        <option value="" disabled selected>Selecione uma pergunta</option>
+                        <option value="1">Qual o nome do seu primeiro animal de estimação?</option>
+                        <option value="2">Qual o nome da rua onde você cresceu?</option>
+                        <option value="3">Qual era o seu apelido de infância?</option>
+                        <option value="4">Qual o nome do seu melhor amigo de infância?</option>
+                        <option value="5">Qual foi sua primeira escola?</option>
+                    </select>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="resposta">Resposta de Segurança</label>
+                    <input type="text" id="resposta" name="resposta" required minlength="3" maxlength="100" autocomplete="off" placeholder="Digite sua resposta">
+                    <small class="dica-senha">Esta resposta será necessária para recuperar sua senha</small>
+                </div>
+
+                <button type="submit" class="btn-verificar">Verificar Dados</button>
+            </form>
+
+            <div class="link-login">
+                <a href="{{ url_for('login') }}">Voltar para o login</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Máscara para telefone
+        const telefoneInput = document.getElementById('telefone');
+        telefoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+                e.target.value = value;
+            }
+        });
+
+        // Validação do formulário
+        document.querySelector('.form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const usuario = document.getElementById('usuario').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const pergunta = document.getElementById('pergunta').value;
+            const resposta = document.getElementById('resposta').value.trim();
+
+            if (usuario.length < 3) { alert('Nome de usuário deve ter pelo menos 3 caracteres'); return; }
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) { alert('E-mail inválido'); return; }
+            if (!telefone.match(/^\(\d{2}\) \d{5}-\d{4}$/)) { alert('Telefone inválido'); return; }
+            if (!pergunta) { alert('Selecione uma pergunta de segurança'); return; }
+            if (resposta.length < 3) { alert('A resposta de segurança deve ter pelo menos 3 caracteres'); return; }
+
+            // Quando backend estiver pronto, este submit enviará para a rota Flask
+            this.submit();
+        });
+    </script>
+</body>
+</html>

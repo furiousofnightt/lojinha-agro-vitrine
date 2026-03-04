@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUA-MARCA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">  
+    
+    <meta name="description" content="A melhor loja agro. Descubra ofertas e novidades!">
+    <meta name="keywords" content="#seus-serviços, #suas-produtos, agro, distribuidora, ração, suplementos">
+    <meta name="author" content="SUA-MARCA">
+    <!--teste visual sem url-->
+    <link rel="stylesheet" href="../static/home.css">
+</head>
+<body>
+
+    <!-- ===== Background Futurista ===== -->
+    <div class="tech-bg"></div>
+    <div class="tech-grid"></div>
+
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <a href="{{ url_for('admin_dashboard') }}" class="btn-admin-fixed">
+        <span>Área Admin</span>
+    </a>
+    {% endif %}
+
+    <!-- ===== Navbar Responsivo ===== -->
+    <header class="navbar">
+        <div class="navbar-brand">
+            <img src="{{ url_for('static', filename='images/#SUA-LOGO-AQUI') }}" alt="SUA-LOGO-AQUI" class="navbar-logo">
+            <span class="brand-name">SUA-MARCA-AQUI</span>
+            <button class="navbar-toggle" aria-label="Abrir menu" onclick="document.querySelector('.navbar-menu').classList.toggle('active')">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+        <nav class="navbar-menu">
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="dropdown-categorias">
+                    <button class="btn-categorias" onclick="document.querySelector('.dropdown-list').classList.toggle('show')">Categorias <span class="dropdown-arrow">▼</span></button>
+                    <ul class="dropdown-list">
+                        {% for categoria in categorias %}
+                        <li><a href="{{ url_for('produtos') }}?categoria={{ categoria[0] }}">{{ categoria[1] }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('ver_carrinho') }}">Carrinho</a></li>
+                    <li><a href="{{ url_for('contato') }}">Contato</a></li>
+                    <li class="sair-right"><a href="{{ url_for('logout') }}">Sair</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('registro') }}">Registrar</a></li>
+                    <li><a href="{{ url_for('sobre') }}">Sobre</a></li>
+                    <li><a href="{{ url_for('contato') }}">Contato</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <script>
+    // Fecha o menu ao clicar fora ou em um link
+    document.addEventListener('click', function(e) {
+        const menu = document.querySelector('.navbar-menu');
+        const toggle = document.querySelector('.navbar-toggle');
+        if (!menu || !toggle) return;
+        if (menu.classList.contains('active') && !menu.contains(e.target) && !toggle.contains(e.target)) {
+            menu.classList.remove('active');
+        }
+        if (e.target.tagName === 'A' && menu.classList.contains('active')) {
+            menu.classList.remove('active');
+        }
+        // Fecha dropdown de categorias ao clicar fora
+        const drop = document.querySelector('.dropdown-list');
+        const btn = document.querySelector('.btn-categorias');
+        if (drop && drop.classList.contains('show') && !drop.contains(e.target) && !btn.contains(e.target)) {
+            drop.classList.remove('show');
+        }
+    });
+    </script>
+
+    <section id="banner">
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+            <h2>Bem-vindo à SUA-MARCA-AQUI</h2>
+            <p>Explore os melhores produtos & Descubra as melhores soluções para o agronegócio com qualidade, confiança e preço justo!</p>
+        <form class="search-bar" action="{{ url_for('produtos') }}" method="get">
+            <input type="text" name="q" placeholder="Buscar produtos, marcas, categorias..." value="{{ request.args.get('q', '') }}">
+            <button type="submit">🔍</button>
+        </form>
+    </div>
+</section>
+
+    <!-- ===== Produtos por Categoria ===== -->
+    <section id="produtos-categorias">
+        {% for categoria, produtos in cat_produtos.items() %}
+        {% set cat_id = categoria[0] %}
+        {% set cat_nome = categoria[1] %}
+        <div class="categoria-bloco">
+            <div class="categoria-titulo">
+                <h2>{{ cat_nome }}</h2>
+                <a class="ver-mais" href="{{ url_for('produtos') }}?categoria={{ cat_id }}">Ver mais &rarr;</a>
+            </div>
+            <div class="produtos-container">
+                <ul class="produtos-lista-grid2x2">
+                    {% for produto in produtos[:20] %}
+                    <li class="produto-item {% if loop.index > 12 %}hide-mobile{% endif %} {% if loop.index > 6 %}hide-small{% endif %} {% if loop.index > 4 %}hide-tiny{% endif %}">
+                        <div class="produto-miniatura">
+                            {% if produto[6] %}
+                                <img src="{{ url_for('static', filename=produto[6].replace('\\', '/')) }}" 
+                                     alt="{{ produto[1] }}"
+                                     loading="lazy">
+                            {% endif %}
+                            <h3 class="produto-titulo">{{ produto[1] }}</h3>
+                                <p class="preco-mini">R$ {{ '{:,.2f}'.format(produto[3]).replace(',', 'X').replace('.', ',').replace('X', '.') }}</p>
+                            <a href="{{ url_for('produto', id=produto[0]) }}" class="btn-mini">Ver Detalhes</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+
+    <!-- ===== Call to Action ===== -->
+    <section id="cta">
+        <h2>Finalize suas compras com segurança!</h2>
+        <a href="{{ url_for('ver_carrinho') }}">Ver Carrinho</a>
+    </section>
+
+    <!-- ===== Rodapé ===== -->
+<footer>
+    <div class="footer-content">
+        <p class="footer-copyright">&copy; {{ current_year }} SUA-MARCA-AQUI. Todos os direitos reservados.</p>
+        <nav>
+            <ul class="footer-nav">
+                <li><a href="{{ url_for('privacidade') }}" class="footer-link">Privacidade</a></li>
+                <li><a href="{{ url_for('termos') }}" class="footer-link">Termos de Uso</a></li>
+                <li><a href="{{ url_for('contato') }}" class="footer-link">Contato</a></li>
+            </ul>
+        </nav>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+@import url('../static/variables.css');
+
+/* Estilo para pedido.html */
+.pedido-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: rgba(107, 44, 27, 0.97);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  padding: 2rem 2.5rem;
+}
+.pedido-container h1 {
+  color: var(--color-accent);
+  margin-bottom: 1.2rem;
+}
+.pedido-container p {
+  margin-bottom: 0.7rem;
+  color: var(--color-light);
+}
+.pedido-container table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-dark);
+  margin-bottom: 2rem;
+}
+.pedido-container th, .pedido-container td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+.pedido-container th {
+  background: var(--color-secondary);
+  color: var(--color-light);
+}
+.pedido-container tr:last-child td {
+  border-bottom: none;
+}
+.pedido-container img {
+  max-width: 60px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.pedido-container a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.pedido-container a:hover {
+  color: var(--color-secondary);
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termos de Uso - SUA-MARCA </title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='termos.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="../static/termos.css">
+</head>
+<body>
+    <div class="tech-bg"></div>
+    <a href="{{ url_for('home') }}" class="btn-voltar">Voltar</a>
+
+    <main class="termos-section">
+        <h1 class="termos-title">Termos de Uso</h1>
+
+        <div class="termos-content">
+            <section>
+                <h2 class="section-title">1. Aceitação dos Termos</h2>
+                <p class="section-text">
+                    Ao acessar e utilizar o site da SUA-MARCA , você concorda em cumprir estes termos de uso e todas as leis e normas aplicáveis ao comércio de rações e produtos agropecuários.
+                </p>
+                <div class="highlight-box">
+                    <p>Se você não concordar com algum destes termos, está proibido de acessar ou utilizar esta plataforma.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">2. Uso da Plataforma</h2>
+                <ul class="section-list">
+                    <li>O cadastro deve ser realizado com informações verdadeiras e atualizadas</li>
+                    <li>A conta é pessoal e intransferível, vinculada a compras e pedidos</li>
+                    <li>É proibido usar a plataforma para qualquer finalidade ilegal ou fraudulenta</li>
+                    <li>O usuário é responsável por manter a segurança de sua conta e senha</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="section-title">3. Produtos e Serviços</h2>
+                <p class="section-text">
+                    A SUA-MARCA  reserva-se o direito de gerenciar a oferta de produtos e serviços conforme a demanda e disponibilidade:
+                </p>
+                <ul class="section-list">
+                    <li>Alterar preços e condições sem aviso prévio</li>
+                    <li>Limitar a quantidade de produtos por pedido, garantindo estoque justo</li>
+                    <li>Recusar pedidos por questões técnicas, logísticas ou comerciais</li>
+                    <li>Descontinuar produtos sem aviso prévio, mantendo sempre a qualidade</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="section-title">4. Garantias e Devoluções</h2>
+                <div class="highlight-box">
+                    <p>Todos os produtos possuem garantia conforme especificado em sua embalagem ou descrição. O prazo para devolução por arrependimento é de 7 dias após o recebimento.</p>
+                </div>
+                <ul class="section-list">
+                    <li>Produto deve ser devolvido em sua embalagem original</li>
+                    <li>Todos os acessórios e componentes devem ser devolvidos</li>
+                    <li>O produto não pode apresentar sinais de uso ou desgaste</li>
+                    <li>É obrigatória a apresentação da nota fiscal para devolução ou troca</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="section-title">5. Propriedade Intelectual</h2>
+                <p class="section-text">
+                    Todo o conteúdo do site, incluindo textos, imagens, logos e materiais promocionais, é de propriedade da SUA-MARCA ou utilizado com permissão expressa.
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <small class="copyright">&copy; 2025 SUA-MARCA </small>
+            <div class="footer-links">
+                <a href="{{ url_for('sobre') }}">Sobre</a>
+                <a href="{{ url_for('privacidade') }}">Privacidade</a>
+                <a href="{{ url_for('termos') }}">Termos</a>
+                <a href="{{ url_for('contato') }}">Contato</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

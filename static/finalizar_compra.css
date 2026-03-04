@@ -1,0 +1,429 @@
+
+@import url('variables.css');
+
+/* Sobrescritas específicas para este arquivo */
+:root {
+  --color-red: #b71c1c;
+  --shadow-soft: 0 4px 20px rgba(0,0,0,0.2);
+  --shadow-strong: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* ===== Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background: var(--gradient-nature);
+  color: var(--color-light);
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ===== Container Finalizar ===== */
+.finalizar-container {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255,255,255,0.1);
+  width: 100%;
+  max-width: 500px;
+  padding: 32px 24px;
+  backdrop-filter: blur(8px);
+  transition: var(--transition);
+}
+
+.finalizar-container:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-strong);
+}
+
+.finalizar-container h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  color: var(--color-accent);
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+/* ===== Formulário ===== */
+.finalizar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.finalizar-form label {
+  font-weight: 600;
+  color: var(--color-light);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.05rem;
+}
+
+.finalizar-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  color: var(--color-light);
+  font-size: 1.05rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+.finalizar-form input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent);
+  background: rgba(0,166,81,0.08);
+}
+
+.cep-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.cep-container input {
+  flex: 1;
+  margin: 0;
+}
+
+.btn-calcular-frete {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: var(--gradient-nature);
+  color: var(--color-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-calcular-frete:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 12px rgba(0,166,81,0.2);
+}
+
+.resultado-frete {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  white-space: pre-line;
+  color: #fff;
+  margin-bottom: 15px;
+  display: none;
+}
+
+.resultado-frete:not(:empty) {
+  display: block;
+}
+
+.finalizar-form input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+/* ===== Botão Finalizar e Voltar ===== */
+.btn-finalizar, .voltar-link {
+  position: relative;
+  width: 100%;
+  background: var(--gradient-nature);
+  color: var(--color-light);
+  padding: 0.9rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border: none;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 1rem;
+  overflow: hidden;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* pseudo-elemento para efeito de brilho */
+.btn-finalizar::after, .voltar-link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 30%;
+  height: 100%;
+  background: rgba(255,255,255,0.15);
+  transform: skewX(-25deg);
+  transition: all 0.7s ease-in-out;
+}
+
+.btn-finalizar:hover::after, .voltar-link:hover::after {
+  left: 120%;
+}
+
+.btn-finalizar:hover, .voltar-link:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-strong);
+}
+
+.btn-finalizar:active, .voltar-link:active {
+  transform: translateY(0);
+}
+
+/* ===== Icone WhatsApp ===== */
+.whatsapp-icon {
+  width: 24px;
+  height: 24px;
+  fill: var(--color-accent);
+}
+
+/* ===== Ajuste de layout para botão WhatsApp + total ===== */
+.finalizar-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.finalizar-total {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
+}
+
+.btn-whatsapp {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-nature);
+  color: var(--color-light);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem 1.2rem;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-whatsapp:hover {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-secondary));
+  color: var(--color-dark);
+  box-shadow: var(--shadow-strong);
+}
+
+/* ===== Responsividade Completa ===== */
+/* Extra small phones (≤ 375px) */
+@media (max-width: 375px) {
+  .finalizar-container {
+    width: 95vw;
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .finalizar-container h1 {
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+  }
+
+  .finalizar-form input {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
+  .btn-finalizar, .voltar-link {
+    font-size: 0.9rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .finalizar-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-whatsapp {
+    width: 100%;
+    text-align: center;
+  }
+
+  .finalizar-total {
+    text-align: center;
+  }
+}
+
+/* Small phones (376px – 600px) */
+@media (min-width: 376px) and (max-width: 600px) {
+  .finalizar-container {
+    width: 95vw;
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .finalizar-container h1 {
+    font-size: 1.35rem;
+    margin-bottom: 16px;
+  }
+
+  .finalizar-form input {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+
+  .btn-finalizar, .voltar-link {
+    font-size: 0.95rem;
+    padding: 0.9rem 1.2rem;
+  }
+
+  .finalizar-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-whatsapp {
+    width: 100%;
+    text-align: center;
+  }
+
+  .finalizar-total {
+    text-align: center;
+  }
+}
+
+/* Tablets (601px – 900px) */
+@media (min-width: 601px) and (max-width: 900px) {
+  .finalizar-container {
+    width: 85vw;
+    padding: 24px;
+    border-radius: 14px;
+  }
+
+  .finalizar-container h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .finalizar-form input {
+    font-size: 1rem;
+    padding: 12px 14px;
+  }
+
+  .btn-finalizar, .voltar-link {
+    font-size: 1rem;
+    padding: 1rem 1.3rem;
+  }
+}
+
+/* Laptops / small desktops (901px – 1200px) */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .finalizar-container {
+    width: 70vw;
+    padding: 28px;
+    border-radius: 16px;
+  }
+
+  .finalizar-container h1 {
+    font-size: 1.6rem;
+    margin-bottom: 22px;
+  }
+
+  .finalizar-form input {
+    font-size: 1.05rem;
+    padding: 14px 16px;
+  }
+
+  .btn-finalizar, .voltar-link {
+    font-size: 1.05rem;
+    padding: 1.1rem 1.3rem;
+  }
+
+  .finalizar-bar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .btn-whatsapp {
+    max-width: 220px;
+  }
+
+  .finalizar-total {
+    font-size: 1.05rem;
+  }
+}
+
+/* Large desktops (>1200px) */
+@media (min-width: 1201px) {
+  .finalizar-container {
+    width: 50vw;
+    max-width: 550px;
+    padding: 32px 28px;
+    border-radius: 18px;
+  }
+
+  .finalizar-container h1 {
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+  }
+
+  .finalizar-form input {
+    font-size: 1.1rem;
+    padding: 15px 18px;
+  }
+
+  .btn-finalizar, .voltar-link {
+    font-size: 1.05rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .finalizar-bar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .btn-whatsapp {
+    max-width: 240px;
+  }
+
+  .finalizar-total {
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - <SUA-MARCA></SUA-MARCA></title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Faça login na sua conta Notórios Informática para acessar suas compras e preferências.">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Preload -->
+    <link rel="preload" href="{{ url_for('static', filename='login.css') }}" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
+    
+    <!-- Políticas de Segurança -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                   font-src 'self' https://fonts.gstatic.com;
+                   img-src 'self' data:;
+                   script-src 'self' 'unsafe-inline' 'unsafe-eval';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    
+    <!-- Estilos -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!--estilo de teste sem url-->
+    <link rel="stylesheet" href="../static/login.css">
+</head>
+<body>
+    <div class="tech-bg"></div>
+    <div class="tech-grid"></div>
+    
+    <a href="{{ url_for('index') }}" class="btn-voltar" aria-label="Voltar para página inicial">Voltar</a>
+
+    <main class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="{{ url_for('static', filename='images/#SUA-LOGO') }}" alt="SUA-LOGO-AQUI" class="login-logo" width="60" height="60">
+                <h1>Login</h1>
+            </div>
+
+            <!-- Formulário invisível para autofill -->
+            <form id="falseForm" style="display:none" aria-hidden="true">
+                <input type="text">
+                <input type="password">
+            </form>
+
+            <!-- Formulário principal -->
+            <form id="loginForm" class="login-form" method="POST" action="{{ url_for('login') }}" autocomplete="new-password">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    <label for="identifier">Usuário, E-mail ou Telefone</label>
+                    <input type="text" 
+                           id="identifier" 
+                           name="identifier" 
+                           required 
+                           pattern="^[a-zA-Z0-9@+._-]+$"
+                           maxlength="100"
+                           autocomplete="new-password"
+                           aria-describedby="identifierHelp">
+                    <small id="identifierHelp" class="form-help">Digite seu nome de usuário, e-mail ou telefone</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="password-input">
+                        <input type="password" 
+                               id="password" 
+                               name="password" 
+                               required
+                               minlength="8"
+                               maxlength="100"
+                               autocomplete="new-password"
+                               data-lpignore="true"
+                               aria-describedby="passwordHelp">
+                        <button type="button" 
+                                class="toggle-password" 
+                                aria-label="Mostrar/Ocultar senha">
+                            <i class="material-icons">visibility_off</i>
+                        </button>
+                    </div>
+                    <small id="passwordHelp" class="form-help">Digite sua senha</small>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember" id="remember">
+                        Manter conectado
+                    </label>
+                    <a href="{{ url_for('redefinir_senha') }}" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+
+                <!-- Contador de Tentativas -->
+                <div id="tentativas-restantes" class="tentativas-msg" style="display: none;">
+                    Tentativas restantes: <span>3</span>
+                </div>
+
+                <button type="submit" class="btn-login">Entrar</button>
+            </form>
+
+            <div class="register-link">
+                Não tem uma conta? <a href="{{ url_for('registro') }}">Registre-se</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle visibilidade da senha
+        function togglePasswordVisibility(button) {
+            const passwordInput = button.parentElement.querySelector('input');
+            const icon = button.querySelector('.material-icons');
+            if (passwordInput && icon) {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.textContent = 'visibility';
+                    button.setAttribute('aria-label', 'Ocultar senha');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.textContent = 'visibility_off';
+                    button.setAttribute('aria-label', 'Mostrar senha');
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.querySelector('.toggle-password');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    togglePasswordVisibility(this);
+                });
+            }
+        });
+
+        // Limpar formulário ao carregar
+        function limparFormularioCompleto() {
+            const form = document.getElementById('loginForm');
+            if (!form) return;
+            form.reset();
+            const inputs = form.querySelectorAll('input[type="text"], input[type="password"]');
+            inputs.forEach(input => input.setAttribute('value', ''));
+            const passwordInput = document.getElementById('password');
+            if (passwordInput) passwordInput.type = 'password';
+        }
+        window.addEventListener('load', limparFormularioCompleto);
+        window.addEventListener('pageshow', e => { if(e.persisted) limparFormularioCompleto(); });
+        window.addEventListener('beforeunload', limparFormularioCompleto);
+
+        // Validação simples antes do envio — permite envio real ao backend quando OK
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const identifier = document.getElementById('identifier').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!identifier.match(/^[a-zA-Z0-9@+._-]+$/)) { 
+                e.preventDefault();
+                alert('Identificador inválido');
+                return;
+            }
+            if (password.length < 8) { 
+                e.preventDefault();
+                alert('Senha mínima 8 caracteres');
+                return;
+            }
+
+            // Se chegou até aqui, deixa o formulário ser submetido normalmente ao backend.
+            // NÃO redirecionamos via JS nem fazemos preventDefault().
+        });
+
+        // Proteção contra clickjacking
+        if (window.self !== window.top) { window.top.location = window.self.location; }
+    </script>
+</body>
+</html>

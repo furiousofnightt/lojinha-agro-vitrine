@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Categorias - SUA-MARCA-AQUI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin_categorias.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!--teste visual sem url-->
+  <!-- Removido: link redundante admin.css -->
+</head>
+<body>
+  <div class="nature-bg"></div>
+  <div class="nature-grid"></div>
+  <header class="admin-header">
+    <h1>Gestão de Categorias</h1>
+    <nav class="admin-nav">
+      <a href="{{ url_for('admin_usuarios') }}" class="btn-voltar">Usuários</a>
+      <a href="{{ url_for('admin_produtos') }}" class="btn-voltar">Produtos</a>
+  <a href="{{ url_for('home') }}" class="btn-voltar">Home</a>
+    </nav>
+  </header>
+
+  <!-- Modal de Aviso para Categorias -->
+  <div id="modal-aviso-categoria" class="modal-aviso" style="display:none;">
+    <div class="modal-aviso-content">
+      <span id="modal-aviso-categoria-msg"></span>
+      <button id="modal-aviso-categoria-fechar" class="btn-fechar-modal">OK</button>
+    </div>
+  </div>
+
+  <main class="admin-container">
+    <section class="add-category">
+      <h2>Adicionar Categoria</h2>
+  <form id="categoriaForm" action="{{ url_for('admin_categorias') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <select name="nome" class="form-select" required>
+          <option value="">Selecione uma categoria</option>
+        <option value="Tratores">Tratores</option>
+        <option value="Colheitadeiras">Colheitadeiras</option>
+        <option value="Implementos Agrícolas">Implementos Agrícolas</option>
+        <option value="Sementes">Sementes</option>
+        <option value="Fertilizantes">Fertilizantes</option>
+        <option value="Defensivos Agrícolas">Defensivos Agrícolas</option>
+        <option value="Irrigação">Sistemas de Irrigação</option>
+        <option value="Drones Agrícolas">Drones Agrícolas</option>
+        <option value="Sensores e Tecnologia">Sensores e Tecnologia</option>
+        <option value="Ração para Gado">Ração para Gado</option>
+        <option value="Ração para Cavalos">Ração para Cavalos</option>
+        <option value="Suplementos para Animais">Acessórios Equinos</option>
+        <option value="Suplementos Nutricionais">Suplementos Nutricionais</option>
+        <option value="Medicamentos Veterinários">Medicamentos Veterinários</option>
+        <option value="Ferramentas e Equipamentos">Ferramentas e Equipamentos</option>
+        <option value="Cercas e Estacas">Cercas e Estacas</option>
+        <option value="Produtos para Pastagem">Produtos para Pastagem</option>
+        <option value="Pets - Rações">Rações para Pets</option>
+        <option value="Pets - Medicamentos">Medicamentos Para Pets</option>
+        <option value="Pets - Acessórios">Acessórios para Pets</option>
+        <option value="Pets - Higiene">Higiene e Cuidados para Pets</option>
+        <option value="Outros">Outros</option>
+        </select>
+        <textarea name="descricao" class="form-textarea" placeholder="Descrição" required></textarea>
+        <button type="submit" class="btn-destaque">Adicionar Categoria</button>
+      </form>
+    </section>
+
+    <section class="category-list">
+      <h2>Categorias Cadastradas</h2>
+      {% if categorias %}
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in categorias %}
+          <tr>
+            <td data-label="ID">{{ c[0] }}</td>
+            <td data-label="Nome">{{ c[1] }}</td>
+            <td data-label="Descrição">{{ c[2] }}</td>
+            <td data-label="Ações">
+              <button type="button" class="btn-remover" data-id="{{ c[0] }}">Remover</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>Nenhuma categoria cadastrada.</p>
+      {% endif %}
+    </section>
+  </main>
+
+  <script>
+    // Handler para adicionar categoria
+    const form = document.getElementById('categoriaForm');
+    if (form) {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        if (this.checkValidity()) {
+          showModalAvisoCategoria('Categoria adicionada com sucesso!', () => this.submit());
+        }
+      });
+    }
+
+    // Handler para remover categoria
+    document.querySelectorAll('.btn-remover').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const id = this.dataset.id;
+        if (!id) return;
+
+        const token = document.querySelector('input[name="csrf_token"]').value;
+        showModalAvisoCategoria('Deseja realmente remover esta categoria?', () => {
+          fetch(`/admin/categoria/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': token
+            }
+          })
+          .then(res => res.json())
+          .then(data => {
+            showModalAvisoCategoria(data.message || data.error, () => location.reload());
+          })
+          .catch(err => showModalAvisoCategoria('Erro ao remover: ' + err));
+        });
+      });
+    });
+    // Modal customizado para avisos em categorias
+    function showModalAvisoCategoria(msg, cb) {
+      const modal = document.getElementById('modal-aviso-categoria');
+      const msgSpan = document.getElementById('modal-aviso-categoria-msg');
+      const btnFechar = document.getElementById('modal-aviso-categoria-fechar');
+      msgSpan.textContent = msg;
+      modal.style.display = 'flex';
+      btnFechar.onclick = function() {
+        modal.style.display = 'none';
+        if (cb) cb();
+      };
+    }
+  </script>
+</body>
+</html>

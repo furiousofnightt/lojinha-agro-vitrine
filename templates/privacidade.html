@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidade - SUA-MARCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='privacidade.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="../static/privacidade.css">
+</head>
+<body>
+    <div class="tech-bg"></div>
+    <a href="{{ url_for('home') }}" class="btn-voltar">Voltar</a>
+
+    <main class="privacidade-section">
+        <h1 class="privacidade-title">Política de Privacidade</h1>
+
+        <div class="privacidade-content">
+            <section>
+                <h2 class="section-title">1. Informações que Coletamos</h2>
+                <p class="section-text">
+                    Na SUA-MARCA, coletamos informações fornecidas diretamente por nossos clientes para garantir um atendimento eficiente e seguro:
+                </p>
+                <ul class="section-list">
+                    <li>Dados de cadastro (nome, e-mail, telefone)</li>
+                    <li>Histórico de pedidos e compras de rações e produtos agropecuários</li>
+                    <li>Preferências de produtos e necessidades dos animais</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="section-title">2. Como Usamos suas Informações</h2>
+                <p class="section-text">
+                    As informações coletadas são utilizadas para oferecer a melhor experiência e serviços personalizados aos nossos clientes:
+                </p>
+                <ul class="section-list">
+                    <li>Processamento e entrega de pedidos com agilidade</li>
+                    <li>Envio de atualizações sobre produtos e promoções</li>
+                    <li>Melhoria contínua de nossa linha de rações e serviços</li>
+                    <li>Atendimento personalizado conforme as necessidades de cada animal</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="section-title">3. Proteção de Dados</h2>
+                <p class="section-text">
+                    A segurança das informações de nossos clientes é prioridade na FareloJP Distribuidora. Implementamos medidas rigorosas para proteger seus dados:
+                </p>
+                <ul class="section-list">
+                    <li>Criptografia de dados em todas as transações</li>
+                    <li>Acesso restrito a informações sensíveis da nossa equipe</li>
+                    <li>Monitoramento contínuo de segurança digital</li>
+                    <li>Backups regulares para garantir integridade dos dados</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="section-title">4. Seus Direitos</h2>
+                <p class="section-text">
+                    Você tem total controle sobre suas informações. Na SUA-MARCA, respeitamos seus direitos conforme as melhores práticas de privacidade:
+                </p>
+                <ul class="section-list">
+                    <li>Acessar suas informações pessoais a qualquer momento</li>
+                    <li>Solicitar atualização ou correção de dados</li>
+                    <li>Solicitar exclusão de dados, garantindo sua privacidade</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <small class="copyright">&copy; 2025 SUA-MARCA</small>
+            <div class="footer-links">
+                <a href="{{ url_for('sobre') }}">Sobre</a>
+                <a href="{{ url_for('privacidade') }}">Privacidade</a>
+                <a href="{{ url_for('termos') }}">Termos</a>
+                <a href="{{ url_for('contato') }}">Contato</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

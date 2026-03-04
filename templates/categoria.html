@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ categoria }} -  SUA-MARCA-AQUI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='produtos.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!--teste visual sem url-->
+    <link rel="stylesheet" href="../static/produtos.css">
+</head>
+<body>
+  <div class="tech-bg"></div>
+  <a href="{{ url_for('produtos') }}" class="btn-voltar">Voltar</a>
+
+  <main class="produtos-container">
+    <h1>Categoria: {{ categoria }}</h1>
+    <div class="cards-grid">
+      {% for produto in produtos %}
+      <div class="card">
+        <img src="{{ url_for('static', filename='uploads/produtos/' + produto['imagem_principal']) }}" alt="{{ produto['nome'] }}">
+        <h3>{{ produto['nome'] }}</h3>
+        <p>{{ produto['descricao'][:100] }}...</p>
+        <p class="preco">R$ {{ produto['preco'] }}</p>
+        <a href="{{ url_for('produto', produto_id=produto['id']) }}" class="btn-destaque">Ver Produto</a>
+        <a href="{{ url_for('adicionar_ao_carrinho', produto_id=produto['id']) }}" class="btn-comprar">Adicionar ao Carrinho</a>
+      </div>
+      {% endfor %}
+    </div>
+  </main>
+</body>
+</html>

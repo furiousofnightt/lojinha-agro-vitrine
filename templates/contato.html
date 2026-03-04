@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - SUA-MARCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='contato.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+    <!--teste visual sem url-->
+    <link rel="stylesheet" href="../static/contato.css">
+</head>
+<body>
+    <div class="tech-bg"></div>
+    <a href="{{ url_for('home') }}" class="btn-voltar">Voltar</a>
+
+    <main class="contato-section">
+        <h1 class="contato-title">Fale Conosco</h1>
+
+        <div class="contato-grid">
+            <div class="contato-card">
+                <i class="contato-icon fab fa-whatsapp"></i>
+                <h3 class="contato-label">WhatsApp</h3>
+                <a href="https://wa.me/55#SEU-NUMERO" class="contato-info" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-arrow-right"></i>
+                    #SEU-NUMERO
+                </a>
+            </div>
+
+            <div class="contato-card">
+                <i class="contato-icon fas fa-phone"></i>
+                <h3 class="contato-label">Telefone</h3>
+                <a href="tel:+55#SEU-NUMERO" class="contato-info">
+                    <i class="fas fa-arrow-right"></i>
+                    #SEU-NUMERO
+                </a>
+            </div>
+
+            <div class="contato-card">
+                <i class="contato-icon fab fa-instagram"></i>
+                <h3 class="contato-label">Instagram</h3>
+                <a href="#LINK-DO-PERFIL-DO-INSTAGRAM" class="contato-info" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-arrow-right"></i>
+                    SEU-@INSTAGRAM
+                </a>
+            </div>
+
+            <div class="contato-card">
+                <i class="contato-icon fab fa-youtube"></i>
+                <h3 class="contato-label">YouTube</h3>
+                <a href="#LINK-DO-PERFIL-DO-SEU-CANAL" class="contato-info" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-arrow-right"></i>
+                    SUA-MARCA
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <small class="copyright">&copy; 2025 SUA-MARCA</small>
+            <div class="footer-links">
+                <a href="{{ url_for('sobre') }}">Sobre</a>
+                <a href="{{ url_for('privacidade') }}">Privacidade</a>
+                <a href="{{ url_for('termos') }}">Termos</a>
+                <a href="{{ url_for('contato') }}">Contato</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Efeito de scroll no navbar
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animação de entrada dos elementos
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .section-title, .about-content, .contact-form').forEach(el => {
+            el.classList.remove('animate-fade-in');
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

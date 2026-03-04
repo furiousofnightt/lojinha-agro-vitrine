@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - SUA-MARCA-AQUI</title>
+    
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <meta name="description" content="Crie sua conta na Notórios Informática e aproveite ofertas exclusivas em hardware e tecnologia.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="preload" href="{{ url_for('static', filename='registro.css') }}" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
+    
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='registro.css') }}">
+    <!--teste visual sem url-->
+    <link rel="stylesheet" href="../static/registro.css">
+</head>
+<body>
+    <div class="nature-bg"></div>
+    <div class="nature-grid"></div>
+    
+    <a href="{{ url_for('index') }}" class="btn-voltar" aria-label="Voltar para página inicial">Voltar</a>
+
+    <main class="registro-container">
+        <div class="registro-card">
+            <div class="registro-header">
+                <img src="{{ url_for('static', filename='images/#SUA-LOGO-AQUI') }}" alt="SUA-LOGO-AQUI" class="registro-logo" width="60" height="60">
+                <h1>Criar Conta</h1>
+            </div>
+
+            <form id="registroForm" class="registro-form" method="POST" action="{{ url_for('registro') }}" autocomplete="off">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username(class="input", placeholder="Nome de usuário") }}
+                    {% for error in form.username.errors %}
+                        <small class="form-help error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="input", placeholder="Email") }}
+                    {% for error in form.email.errors %}
+                        <small class="form-help error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.phone.label }}
+                    {{ form.phone(class="input", placeholder="Telefone") }}
+                    {% for error in form.phone.errors %}
+                        <small class="form-help error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.password.label }}
+                    <div class="password-input">
+                        {{ form.password(class="input", placeholder="Senha") }}
+                        <button type="button" class="toggle-password" aria-label="Mostrar/Ocultar senha">
+                            <i class="material-icons">visibility_off</i>
+                        </button>
+                    </div>
+                    {% for error in form.password.errors %}
+                        <small class="form-help error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.securityQuestion.label }}
+                    {{ form.securityQuestion(class="input", placeholder="Pergunta de Segurança") }}
+                    {% for error in form.securityQuestion.errors %}
+                        <small class="form-help error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.securityAnswer.label }}
+                    {{ form.securityAnswer(class="input", placeholder="Resposta de Segurança") }}
+                    {% for error in form.securityAnswer.errors %}
+                        <small class="form-help error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-terms">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="terms" required>
+                        <span>Eu li e aceito os <a href="{{ url_for('termos') }}" target="_blank">Termos de Uso</a> e a <a href="{{ url_for('privacidade') }}" target="_blank">Política de Privacidade</a></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-registro">Registrar</button>
+            </form>
+
+            <div class="login-link">
+                Já tem uma conta? <a href="{{ url_for('login') }}">Faça login</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle visibilidade da senha
+        function togglePasswordVisibility(button) {
+            const passwordInput = button.parentElement.querySelector('input');
+            const icon = button.querySelector('.material-icons');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.toggle-password').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    togglePasswordVisibility(this);
+                });
+            });
+
+            // Máscara para telefone
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length <= 11) {
+                        value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                        value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+                        e.target.value = value;
+                    }
+                });
+            }
+
+            // Proteção contra clickjacking
+            if (window.self !== window.top) { window.top.location = window.self.location; }
+        });
+    </script>
+</body>
+</html>

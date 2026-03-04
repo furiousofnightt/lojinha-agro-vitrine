@@ -1,0 +1,29 @@
+/* ===== Vari\u00e1veis CSS Globais ===== */
+:root {
+  --color-primary: #6B2C1B;
+  --color-secondary: #8B3E2C;
+  --color-accent: #00A651;
+  --color-dark: #000000;
+  --color-dark-variant: #1a1a1a;
+  --color-light: #ffffff;
+  --color-danger: #dc3545;
+  --color-success: #28a745;
+  --color-gray: #6c757d;
+  --color-gray-dark: #5a6268;
+  --color-danger-dark: #c82333;
+  --color-success-dark: #218838;
+  --gradient-nature: linear-gradient(135deg, var(--color-accent), var(--color-secondary));
+  --shadow-soft: 0 4px 20px rgba(107, 44, 27, 0.25);
+  --shadow-strong: 0 8px 32px rgba(107, 44, 27, 0.35);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --border-glow: rgba(45, 45, 45, 0.25);
+  --bg-primary: rgba(45, 45, 45, 0.85);
+  --bg-secondary: rgba(55, 55, 55, 0.82);
+  --bg-light: rgba(45, 45, 45, 0.75);
+  --bg-lighter: rgba(45, 45, 45, 0.65);
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}

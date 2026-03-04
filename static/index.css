@@ -1,0 +1,591 @@
+@import url('variables.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  background: var(--color-dark);
+  color: var(--color-light);
+  line-height: 1.6;
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ===== Background Natural ===== */
+.tech-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(139, 62, 44, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 166, 81, 0.2) 0%, transparent 50%),
+    linear-gradient(180deg, var(--color-dark) 0%, var(--color-dark-variant) 100%);
+}
+
+.tech-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* ===== Navbar ===== */
+.nav-menu {
+  width: 100%;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(107, 44, 27, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 166, 81, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.nav-logo {
+  height: 40px;
+  width: auto;
+}
+
+.brand-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.nav-right {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  transition: var(--transition);
+  white-space: nowrap; /* 🔒 evita quebra do texto */
+}
+
+/* ===== Botões Animados ===== */
+.btn-login,
+.btn-register {
+  background: var(--gradient-nature);
+  color: var(--color-light);
+  padding: 0.9rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow-soft);
+  border: none;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Efeito de brilho que passa no botão */
+.btn-login::after,
+.btn-register::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(25deg);
+  transition: all 0.7s ease-in-out;
+}
+
+.btn-login:hover::after,
+.btn-register:hover::after {
+  left: 125%;
+}
+
+.btn-login:hover,
+.btn-register:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-strong);
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  padding: 6rem 5% 4rem;
+  text-align: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.hero h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.hero h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2rem;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+  background: rgba(107, 44, 27, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.hero p {
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  font-size: 1.2rem;
+  color: var(--color-light)
+}
+
+.hero p a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: var(--transition);
+  border-bottom: 1px dashed var(--color-accent);
+  padding-bottom: 2px;
+}
+
+.hero p a:hover {
+  color: var(--color-secondary);
+  border-bottom-style: solid;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: nowrap; /* 🔒 sempre lado a lado */
+}
+
+.btn-destaque {
+  background: var(--gradient-nature);
+  color: var(--color-light);
+  padding: 0.9rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow-soft);
+  border: none;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efeito de brilho que passa no botão */
+.btn-destaque::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(25deg);
+  transition: all 0.7s ease-in-out;
+}
+
+.btn-destaque:hover::after {
+  left: 125%;
+}
+
+.btn-destaque:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-strong);
+}
+
+.hero-video-container {
+  display: flex;
+  justify-content: center;
+}
+
+.video-wrapper {
+  max-width: 720px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-strong);
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  border: 6px solid; /* define a espessura da borda */
+  border-image: linear-gradient(135deg, #ff0000, #ff9900, #00ff00, #00ccff, #9900ff) 1;
+}
+/* ===== Cards Section ===== */
+.cards-section {
+  padding: 5rem 5%;
+  text-align: center;
+}
+
+.section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: var(--color-accent);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background: rgba(0, 68, 204, 0.15);
+  border: 1px solid rgba(0, 68, 204, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: var(--transition);
+  backdrop-filter: blur(8px);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-strong);
+}
+
+.card-icon {
+  width: 100px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  color: var(--color-accent);
+  margin-bottom: 0.75rem;
+}
+
+.card-description {
+  color: rgba(255,255,255,0.85);
+  font-size: 1rem;
+}
+
+/* ===== Footer ===== */
+.footer {
+  background: rgba(0, 51, 160, 0.1);
+  padding: 1rem 1.5rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Seção de Contato */
+.contact-info {
+  text-align: center;
+  padding: 2rem 5%;
+  margin: 2rem auto;
+  max-width: 800px;
+  background: rgba(107, 44, 27, 0.1);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 166, 81, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-soft);
+}
+
+.contact-info p {
+  font-size: 1.2rem;
+  margin: 1rem 0;
+  color: var(--color-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.contact-info a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: var(--transition);
+  border-bottom: 1px dashed var(--color-accent);
+  padding-bottom: 2px;
+}
+
+.contact-info a:hover {
+  color: var(--color-secondary);
+  border-bottom-style: solid;
+}
+
+.contact-info strong {
+  color: var(--color-accent);
+  transition: var(--transition);
+  display: inline-block;
+  position: relative;
+}
+
+.contact-info a:has(strong):hover strong {
+  transform: translateY(-2px);
+  text-shadow: 0 4px 12px rgba(0, 166, 81, 0.3);
+}
+
+.contact-info a:has(strong) {
+  border-bottom: none;
+}
+
+.contact-info a:has(strong)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: var(--gradient-nature);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease;
+}
+
+.contact-info a:has(strong):hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--color-accent);
+}
+
+.footer p {
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+}
+
+/* ===== Animações ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Responsividade Melhorada ===== */
+
+/* Tablets médios (até 992px) */
+@media (max-width: 992px) {
+  .hero {
+    padding: 5rem 4% 3rem;
+  }
+
+  .hero h1 { font-size: 2.3rem; }
+  .hero h2 {
+    font-size: 1.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+  .hero p { font-size: 1rem; margin-bottom: 1.5rem; }
+  .section-title { font-size: 2rem; }
+
+  .contact-info {
+    padding: 1.75rem 4%;
+    margin: 1.5rem auto;
+  }
+
+  .contact-info p {
+    font-size: 1.1rem;
+  }
+
+  .cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+  .card { padding: 1.75rem; }
+}
+
+/* Tablets pequenos e celulares grandes (até 768px) */
+@media (max-width: 768px) {
+  .nav-menu {
+    padding: 0.5rem;
+    width: 100%;
+    margin: 0;
+  }
+  .nav-logo {
+    height: 32px;
+  }
+  .brand-name {
+    font-size: 0.9rem;
+  }
+  .btn-login,
+  .btn-register {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    min-width: auto;
+  }
+  .nav-right {
+    gap: 0.3rem;
+  }
+  .nav-link { font-size: 0.85rem; padding: 0.35rem 0.7rem; }
+  .nav-right { gap: 0.5rem; }
+
+  .hero h1 { font-size: 2rem; }
+  .hero h2 {
+    font-size: 1.5rem;
+    padding: 0.35rem 0.7rem;
+    margin-bottom: 0.8rem;
+  }
+  .hero p { font-size: 0.95rem; }
+  .video-wrapper { border-radius: 12px; }
+
+  .cards-section { padding: 4rem 4% 2rem; }
+  .section-title { font-size: 1.8rem; }
+  .card { padding: 1.5rem; }
+  .card-title { font-size: 1.2rem; }
+  .card-description { font-size: 0.95rem; }
+
+  .contact-info {
+    padding: 1.5rem 3%;
+    margin: 1rem auto;
+  }
+
+  .contact-info p {
+    font-size: 1rem;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .footer-links { gap: 0.5rem; }
+  .footer p { font-size: 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  .btn-login,
+  .btn-register,
+  .btn-destaque {
+    padding: 0.6rem 1rem;     /* ajusta padding para caber na tela */
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .btn-login,
+  .btn-register,
+  .btn-destaque {
+    padding: 0.5rem 0.8rem;   /* ainda menor para smartphones pequenos */
+    font-size: 0.8rem;
+  }
+}
+
+/* Smartphones muito pequenos (até 360px) */
+@media (max-width: 360px) {
+  .nav-menu {
+    padding: 0.4rem;
+  }
+  .nav-logo {
+    height: 28px;
+  }
+  .brand-name {
+    font-size: 0.8rem;
+  }
+  .btn-login,
+  .btn-register {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+  .nav-right {
+    gap: 0.25rem;
+  }
+
+  .hero h1 { font-size: 1.5rem; }
+  .hero h2 {
+    font-size: 1.2rem;
+    padding: 0.3rem 0.6rem;
+    margin-bottom: 0.6rem;
+    background: rgba(107, 44, 27, 0.15);
+  }
+  .hero p { font-size: 0.85rem; }
+
+  /* Ajuste de botões para smartphones muito pequenos */
+  .contact-info {
+    padding: 1.25rem 2%;
+    margin: 0.75rem auto;
+    border-radius: 12px;
+  }
+
+  .contact-info p {
+    font-size: 0.9rem;
+    margin: 0.75rem 0;
+  }
+
+  .contact-info a,
+  .contact-info strong {
+    font-size: 0.9rem;
+    word-break: break-word;
+  }
+
+  .btn-destaque,
+  .btn-register,
+  .btn-login {
+    display: inline-flex;       /* garante alinhamento flexível */
+    align-items: center;        /* centraliza verticalmente */
+    justify-content: center;    /* centraliza horizontalmente */
+    text-align: center;
+    line-height: 1.2;           /* mantém texto proporcional */
+    font-size: 0.8rem;          /* tamanho adequado */
+    padding: 0.5rem 0.8rem;     /* espaço interno adequado */
+    min-height: 36px;           /* altura mínima para visual consistente */
+  }
+
+  .card { padding: 1rem; border-radius: 12px; }
+  .card-title { font-size: 1rem; }
+
+  .footer-links a { font-size: 0.8rem; }
+  .footer p { font-size: 0.7rem; }
+}
+

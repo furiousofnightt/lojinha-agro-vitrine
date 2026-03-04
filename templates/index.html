@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SUA-MARCA - Sua Melhor Distribuidora Agro</title>
+  <meta name="description" content="A melhor loja de informática, computadores e tecnologia. Descubra ofertas e novidades!">
+  <meta name="keywords" content="informática, computadores, hardware, loja, tecnologia, acessórios, gamer">
+  <meta name="author" content="Notórios Informática">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
+  <link rel="preload" href="{{ url_for('static', filename='images/logo-index.png') }}" as="image">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+
+  <!--teste visual sem url-->
+  <link rel="stylesheet" href="static/index.css">
+</head>
+<body>
+  <div class="tech-bg"></div>
+  <div class="tech-grid"></div>
+  <!-- Navbar moderna -->
+  <nav class="nav-menu">
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='images/#SUA-LOGO') }}" alt="SUA-LOGO" class="nav-logo">
+      <span class="brand-name">SUA-MARCA</span>
+    </div>
+    <div class="nav-right">
+      <!-- Ajustado para rotas Flask -->
+      <a href="{{ url_for('login') }}" class="nav-link btn-login">Login</a>
+      <a href="{{ url_for('registro') }}" class="nav-link btn-register">Registrar</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <!-- Hero com vídeo e botões -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Bem-vindo à SUA-MARCA</h1>
+        <h2>🐎 PRO HORSE Ração dos Campeões 🏆</h2>
+    <p>🏢 <strong>Endereço:</strong> <a href="#LINK-DO-GOOGLE-MAPS">SEU-ENDEREÇO</a></p>
+        <div class="btn-group">
+          <a href="{{ url_for('registro') }}" class="btn-destaque">Criar Conta</a>
+          <a href="{{ url_for('produtos') }}" class="btn-destaque btn-explorar">Explorar</a>
+        </div>
+        <div class="hero-video-container">
+          <div class="video-wrapper">
+            <iframe class="hero-video" width="560" height="315"
+        src="https://www.youtube.com/embed/kWZLjEwD_8g"
+        title="Vídeo de Apresentação" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards informativos -->
+    <section id="explorar" class="cards-section">
+      <h2 class="section-title">Por que escolher a SUA-MARCA?</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <img src="{{ url_for('static', filename='images/equinos.png') }}" alt="Equinos" class="card-icon">
+          <h3 class="card-title">Equinos</h3>
+          <p class="card-description">Rações e cuidados especiais para cavalos.</p>
+        </div>
+        <div class="card">
+          <img src="{{ url_for('static', filename='images/bovinos.png') }}" alt="Bovinos" class="card-icon">
+          <h3 class="card-title">Bovinos</h3>
+          <p class="card-description">Nutrição de qualidade para gado de corte e leite.</p>
+        </div>
+        <div class="card">
+          <img src="{{ url_for('static', filename='images/caprinos.png') }}" alt="Ovinos/Caprinos" class="card-icon">
+          <h3 class="card-title">Ovinos & Caprinos</h3>
+          <p class="card-description">Suplementos e rações para pequenos ruminantes.</p>
+        </div>
+        <div class="card">
+          <img src="{{ url_for('static', filename='images/pets.png') }}" alt="Pets" class="card-icon">
+          <h3 class="card-title">Pets</h3>
+          <p class="card-description">Alimentos balanceados para seus Pets e Atendimento Especializado.</p>
+        </div>
+      </div>
+    </section>
+    <section class="contact-info">
+    <p>🏢 Endereço: <a href="#LINK-DO-GOOGLE-MAPS">SEU-ENDEREÇO</a></p>
+    <p>📱 WhatsApp: <a href="tel:+55#SEU-NUMERO"><strong>SEU-TELEFONE</strong></a></p>
+    </section>
+    <!-- Rodapé -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="{{ url_for('sobre') }}">Sobre</a>
+        <a href="{{ url_for('contato') }}">Contato</a>
+        <a href="{{ url_for('termos') }}">Termos</a>
+        <a href="{{ url_for('privacidade') }}">Privacidade</a>
+      </div>
+      <p class="copyright">&copy; 2025 SUA-MARCA. Todos os direitos reservados.</p>
+    </footer>
+  </main>
+</body>
+</html>

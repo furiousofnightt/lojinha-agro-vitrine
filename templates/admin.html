@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin -  SUA-MARCA-AQUI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin_dashboard.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!--teste visual sem url-->
+  <!-- Removido: link redundante admin.css -->
+</head>
+<body>
+  <div class="nature-bg"></div>
+  <div class="nature-grid"></div>
+
+  <header class="admin-header">
+    <h1>Dashboard do Admin</h1>
+  </header>
+
+  {# Banner receptivo de boas-vindas para admin #}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for cat, msg in messages %}
+        {% if cat == 'success' and 'Bem-vindo' in msg %}
+          <div class="flash-bemvindo">
+            <span class="emoji-bemvindo">👋</span>
+            <span class="msg-bemvindo">{{ msg|safe }}</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <main class="admin-container">
+    <section class="dashboard-buttons">
+      <h2>Acesso Rápido</h2>
+      <div class="buttons-grid">
+        <a href="{{ url_for('admin_produtos') }}" class="btn-destaque">🖥️ Produtos</a>
+        <a href="{{ url_for('admin_usuarios') }}" class="btn-destaque">👤 Usuários</a>
+  <a href="{{ url_for('admin_categorias') }}" class="btn-destaque">📂 Categorias</a>
+  <a href="{{ url_for('home') }}" class="btn-destaque">🏠 Home</a>
+      </div>
+    </section>
+
+    <section class="dashboard-summary">
+      <h2>Resumo Rápido</h2>
+      <div class="cards-grid">
+        <div class="card summary-card produtos-card">
+          <h3>🖥️ Produtos</h3>
+          <p>Total: {{ total_produtos or 0 }}</p>
+        </div>
+        <div class="card summary-card usuarios-card">
+          <h3>👤 Usuários</h3>
+          <p>Total: {{ total_usuarios or 0 }}</p>
+        </div>
+        <div class="card summary-card categorias-card">
+          <h3>📂 Categorias</h3>
+          <p>Total: {{ total_categorias or 0 }}</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+  <a href="{{ url_for('home') }}" class="btn-voltar">Sair</a>
+  </footer>
+</body>
+</html>

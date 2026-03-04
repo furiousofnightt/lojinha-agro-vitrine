@@ -1,0 +1,551 @@
+@import url('../static/variables.css');
+
+/* Reset e Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    background: var(--color-dark);
+    color: var(--color-light);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Efeitos de Background */
+.nature-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    background: 
+    radial-gradient(circle at 20% 20%, rgba(139, 62, 44, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 166, 81, 0.2) 0%, transparent 50%),
+    linear-gradient(180deg, var(--color-dark) 0%, var(--color-dark-variant) 100%);
+    opacity: 1;
+}
+
+.nature-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 1;
+    pointer-events: none;
+    animation: gridMove 20s linear infinite;
+}
+
+/* Botão Voltar */
+.btn-voltar {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 2px solid var(--color-secondary);
+    color: var(--color-accent);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+    border-radius: 8px;
+    z-index: 100;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.btn-voltar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-nature);
+    z-index: -1;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.btn-voltar:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-strong);
+    border-color: var(--color-accent);
+}
+
+.btn-voltar:hover::before {
+    opacity: 1;
+}
+
+/* Container Principal */
+.registro-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Card de Registro */
+.registro-card {
+    background: rgba(107, 44, 27, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(107, 44, 27, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    animation: fadeIn 0.5s ease-out;
+    transition: var(--transition);
+}
+
+.registro-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-strong);
+}
+
+/* Header do Card */
+.registro-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.registro-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.registro-header h1 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+/* Formulário */
+.registro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-shadow: 0 0 10px rgba(0, 166, 81, 0.2);
+}
+
+input, select {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-secondary);
+    background: rgba(107, 44, 27, 0.8);
+    color: var(--color-light);
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+/* Estilo dos placeholders */
+input::placeholder,
+select::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.95rem;
+}
+
+/* Estilo dos placeholders em navegadores WebKit (Chrome, Safari, etc) */
+input::-webkit-input-placeholder,
+select::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.95rem;
+}
+
+/* Estilo dos placeholders em Firefox */
+input::-moz-placeholder,
+select::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.95rem;
+    opacity: 1;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 15px rgba(0, 166, 81, 0.2);
+}
+
+.form-help {
+    font-size: 0.8rem;
+    color: var(--color-light);
+    opacity: 0.9;
+}
+
+/* Campo de Senha */
+.password-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--color-accent);
+    cursor: pointer;
+    padding: 0.5rem;
+    opacity: 0.7;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+    color: var(--color-accent);
+}
+
+.toggle-password:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.toggle-password:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.toggle-password i {
+    font-size: 1.2rem;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* Ajuste do padding do input de senha para acomodar o ícone */
+.password-input input[type="password"],
+.password-input input[type="text"] {
+    padding-right: 2.5rem;
+    width: 100%;
+}
+
+/* Efeito sutil de hover no campo de senha */
+.password-input:hover .toggle-password {
+    opacity: 0.85;
+}
+
+/* Checkbox de Termos */
+.form-terms {
+    margin: 1rem 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--color-light);
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-top: 0.25rem;
+    accent-color: var(--color-accent);
+}
+
+.checkbox-label a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: var(--transition);
+    position: relative;
+}
+
+.checkbox-label a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.checkbox-label a:hover::after {
+    transform: scaleX(1);
+}
+
+.checkbox-label a:hover {
+    text-shadow: 0 0 10px rgba(0, 166, 81, 0.5);
+}
+
+/* Botão de Registro */
+.btn-registro {
+    position: relative;
+    width: 100%;
+    background: var(--gradient-nature);
+    color: var(--color-light);
+    padding: 0.9rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    box-shadow: var(--shadow-soft);
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.btn-registro::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -75%;
+    width: 50%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.15);
+    transform: rotate(25deg);
+    transition: all 0.7s ease-in-out;
+}
+
+.btn-registro:hover::after {
+    left: 125%;
+}
+
+.btn-registro:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-strong);
+}
+
+.btn-registro:active {
+    transform: translateY(-1px) scale(1);
+}
+
+/* Link para Login */
+.login-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-light);
+}
+
+.login-link a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    position: relative;
+}
+
+.login-link a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.login-link a:hover::after {
+    transform: scaleX(1);
+}
+
+.login-link a:hover {
+    text-shadow: 0 0 10px rgba(0, 166, 81, 0.5);
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(30px); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+
+    .registro-container {
+        margin: 1.5rem auto;
+        max-width: 450px;
+    }
+
+    .registro-card {
+        padding: 1.75rem;
+    }
+
+    .registro-logo {
+        width: 120px;
+    }
+
+    .registro-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .btn-voltar {
+        top: 1.5rem;
+        left: 1.5rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+
+    .registro-container {
+        margin: 0.5rem auto;
+        padding: 0.5rem;
+        max-width: 100%;
+    }
+
+    .registro-card {
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+
+    .registro-logo {
+        width: 100px;
+    }
+
+    .registro-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .registro-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-voltar {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .form-group {
+        gap: 0.35rem;
+    }
+
+    input, select {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.95rem;
+    }
+
+    .btn-registro {
+        padding: 0.8rem;
+        font-size: 0.95rem;
+    }
+
+    .login-link {
+        font-size: 0.85rem;
+        margin-top: 1.25rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .registro-container {
+        margin: 0;
+        padding: 0.25rem;
+    }
+
+    .registro-card {
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    .registro-logo {
+        width: 90px;
+    }
+
+    .registro-header h1 {
+        font-size: 1.35rem;
+    }
+
+    .btn-voltar {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .checkbox-label {
+        font-size: 0.8rem;
+        gap: 0.5rem;
+    }
+}
+
+/* Melhorias de Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Alto Contraste */
+@media (forced-colors: active) {
+    .btn-registro,
+    .btn-voltar {
+        border: 2px solid currentColor;
+    }
+    
+    input, 
+    select {
+        border: 2px solid currentColor;
+    }
+}

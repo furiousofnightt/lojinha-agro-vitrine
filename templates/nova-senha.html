@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Senha -  SUA-MARCA-AQUI</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='redefinir-senha.css') }}">
+
+    <!-- Estilos de teste sem url -->
+    <link rel="stylesheet" href="../static/redefinir-senha.css">
+</head>
+<body>
+    <div class="tech-bg"></div>
+    
+    <main class="container">
+        <div class="card">
+            <div class="header">
+                <img src="{{ url_for('static', filename='images/logo-farelojp.png') }}" alt="Logo Notórios" class="logo">
+                <h1>Nova Senha</h1>
+                <p>Digite e confirme sua nova senha</p>
+            </div>
+
+            <form class="form" action="{{ url_for('nova_senha', token=request.view_args.get('token')) }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-grupo">
+                    <label for="senha">Nova Senha</label>
+                    <div class="senha-input">
+                        <input type="password" id="senha" name="senha" required minlength="8"
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+                               autocomplete="new-password" placeholder="Digite sua nova senha">
+                        <button type="button" class="btn-mostrar-senha" aria-label="Mostrar/Ocultar senha">
+                            <span class="material-icons">visibility_off</span>
+                        </button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-meter"></div>
+                    </div>
+                    <div class="strength-text"></div>
+                    <small class="dica-senha">
+                        A senha deve conter pelo menos 8 caracteres, incluindo maiúsculas, 
+                        minúsculas, números e caracteres especiais
+                    </small>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="confirmar">Confirmar Nova Senha</label>
+                    <div class="senha-input">
+                        <input type="password" id="confirmar" name="confirmar" required minlength="8"
+                               autocomplete="new-password" placeholder="Confirme sua nova senha">
+                        <button type="button" class="btn-mostrar-senha" aria-label="Mostrar/Ocultar senha">
+                            <span class="material-icons">visibility_off</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-verificar">Salvar Nova Senha</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Toggle visibilidade da senha
+        document.querySelectorAll('.btn-mostrar-senha').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('.material-icons');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.textContent = 'visibility';
+                    this.setAttribute('aria-label', 'Ocultar senha');
+                } else {
+                    input.type = 'password';
+                    icon.textContent = 'visibility_off';
+                    this.setAttribute('aria-label', 'Mostrar senha');
+                }
+            });
+        });
+
+        // Verificação de força da senha
+        function verificarForcaSenha(senha) {
+            let pontos = 0;
+            if (senha.length >= 8) pontos++;
+            if (senha.length >= 12) pontos++;
+            if (senha.match(/[a-z]/)) pontos++;
+            if (senha.match(/[A-Z]/)) pontos++;
+            if (senha.match(/\d/)) pontos++;
+            if (senha.match(/[^a-zA-Z0-9]/)) pontos++;
+            if (senha.length >= 12 && senha.match(/[a-z]/) && senha.match(/[A-Z]/) && senha.match(/\d/) && senha.match(/[^a-zA-Z0-9]/)) pontos++;
+            return { pontos: pontos, nivel: pontos < 3 ? 'fraca' : pontos < 5 ? 'media' : 'forte' };
+        }
+
+        // Atualizar indicador de força da senha
+        const senhaInput = document.getElementById('senha');
+        senhaInput.addEventListener('input', function() {
+            const senha = this.value;
+            const forca = verificarForcaSenha(senha);
+            const meter = document.querySelector('.strength-meter');
+            const text = document.querySelector('.strength-text');
+            meter.classList.remove('fraca', 'media', 'forte');
+            if (senha.length > 0) {
+                meter.classList.add(forca.nivel);
+                text.textContent = forca.nivel.charAt(0).toUpperCase() + forca.nivel.slice(1);
+            } else {
+                text.textContent = '';
+            }
+        });
+
+        // Validação do formulário
+        document.querySelector('.form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const senha = document.getElementById('senha').value;
+            const confirmar = document.getElementById('confirmar').value;
+            const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+            if (!regexSenha.test(senha)) { alert('A senha não atende aos requisitos mínimos'); return; }
+            if (senha !== confirmar) { alert('As senhas não coincidem'); return; }
+            // Envio para backend Flask será feito aqui
+            this.submit();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Produtos - SUA-MARCA-AQUI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_produtos.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+</head>
+<body>
+    <div class="nature-bg"></div>
+    <div class="nature-grid"></div>
+
+    <header class="admin-header">
+        <h1>Gestão de Produtos</h1>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin_usuarios') }}" class="btn-voltar">Usuários</a>
+            <a href="{{ url_for('admin_categorias') }}" class="btn-voltar">Categorias</a>
+            <a href="{{ url_for('home') }}" class="btn-voltar">Home</a>
+        </nav>
+    </header>
+        <main class="admin-container">
+        <!-- Modal de Aviso -->
+        <div id="modal-aviso" class="modal-aviso" style="display:none;">
+            <div class="modal-aviso-content">
+                <span id="modal-aviso-msg"></span>
+                <button id="modal-aviso-fechar" class="btn-fechar-modal">OK</button>
+            </div>
+        </div>
+        <!-- Adicionar Produto -->
+        <section class="add-product modern-card">
+            <h2>Adicionar Produto</h2>
+            <form action="{{ url_for('novo_produto') }}" method="POST" enctype="multipart/form-data" class="form-produto-grid">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-row">
+                    <input type="text" name="nome" placeholder="Nome do Produto" class="form-input" required>
+                    <input type="text" name="preco" placeholder="Preço (ex: 1.456,90 ou 1456.90)" class="form-input" required>
+                </div>
+                <div class="form-row">
+                    <input type="number" name="estoque" placeholder="Estoque" class="form-input" required>
+                    <select name="categoria_id" class="select-categoria" required>
+                        <option value="">Selecione Categoria</option>
+                        {% for c in categorias %}
+                            <option value="{{ c[0] }}">{{ c[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <textarea name="descricao" placeholder="Descrição" class="form-textarea" required></textarea>
+                <div class="form-row preview-row">
+                    <div class="preview-col">
+                        <label>Imagens (até 5):</label>
+                        <input type="file" id="imagens-input" class="form-input" accept="image/*" multiple>
+                        <div id="preview-imagens"></div>
+                        <input type="hidden" name="imagens" id="imagens-hidden">
+                    </div>
+                    <div class="preview-col">
+                        <label>Vídeo (até 1 min, mp4):</label>
+                        <input type="file" id="video-input" class="form-input" accept="video/mp4">
+                        <div id="preview-video"></div>
+                        <input type="hidden" name="video" id="video-hidden">
+                    </div>
+                </div>
+                <button type="submit" class="btn-destaque">Adicionar Produto</button>
+            </form>
+        </section>
+
+        <!-- Produtos Cadastrados -->
+        <section class="product-list">
+            <h2>Produtos Cadastrados</h2>
+            {% if produtos %}
+            <div class="cards-container">
+                <div class="cards-grid">
+                    {% for p in produtos %}
+                    <div class="card-produto">
+                        <div class="card-produto-header">
+                            <span>ID: {{ p[0] }}</span>
+                            <span>{{ p[8] or 'Sem Categoria' }}</span>
+                        </div>
+                        <h3 class="card-produto-nome">{{ p[1] }}</h3>
+                        <div class="card-produto-info">
+                            <div>
+                                <label>Preço</label>
+                                <span>R$ {{ '{:,.2f}'.format(p[3]).replace(',', 'X').replace('.', ',').replace('X', '.') }}</span>
+                            </div>
+                            <div>
+                                <label>Estoque</label>
+                                <span>{{ p[4] }} unidades</span>
+                            </div>
+                        </div>
+                        <div class="card-produto-acoes">
+                            <button type="button" class="btn-remover" data-id="{{ p[0] }}">Remover</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <p>Nenhum produto cadastrado.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <script>
+    // Fallback: exibe aviso se localStorage marcar sucesso
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('produto_adicionado_sucesso')) {
+            document.getElementById('flash-produto-local').style.display = 'flex';
+            localStorage.removeItem('produto_adicionado_sucesso');
+        }
+    });
+
+    // Ao enviar o form de novo produto, marca no localStorage
+    document.querySelector("form[action='{{ url_for('novo_produto') }}']")?.addEventListener('submit', function() {
+        localStorage.setItem('produto_adicionado_sucesso', '1');
+    });
+    // Gerenciamento de imagens
+    let imagensSelecionadas = [];
+    document.getElementById('imagens-input').addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        imagensSelecionadas = imagensSelecionadas.concat(files);
+        if (imagensSelecionadas.length > 5) imagensSelecionadas = imagensSelecionadas.slice(0,5);
+        atualizarPreviewImagens();
+    });
+    function atualizarPreviewImagens() {
+        const preview = document.getElementById('preview-imagens');
+        preview.innerHTML = '';
+        imagensSelecionadas.forEach((file, idx) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const div = document.createElement('div');
+                div.style.position = 'relative';
+                div.style.display = 'inline-block';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '60px';
+                img.style.height = '60px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '6px';
+                img.style.border = '2px solid #eee';
+                img.title = file.name;
+                const btn = document.createElement('button');
+                btn.innerText = 'x';
+                btn.type = 'button';
+                btn.style.position = 'absolute';
+                btn.style.top = '0';
+                btn.style.right = '0';
+                btn.style.background = '#e53935';
+                btn.style.color = '#fff';
+                btn.style.border = 'none';
+                btn.style.borderRadius = '50%';
+                btn.style.width = '20px';
+                btn.style.height = '20px';
+                btn.style.cursor = 'pointer';
+                btn.onclick = () => { imagensSelecionadas.splice(idx,1); atualizarPreviewImagens(); };
+                div.appendChild(img);
+                div.appendChild(btn);
+                preview.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+        // Atualiza input hidden para backend (não envia, só visual)
+        document.getElementById('imagens-hidden').value = '';
+    }
+    // Gerenciamento de vídeo
+    let videoSelecionado = null;
+    document.getElementById('video-input').addEventListener('change', function(e) {
+        videoSelecionado = e.target.files[0] || null;
+        atualizarPreviewVideo();
+    });
+    function atualizarPreviewVideo() {
+        const preview = document.getElementById('preview-video');
+        preview.innerHTML = '';
+        if (videoSelecionado) {
+            const span = document.createElement('span');
+            span.innerText = 'Vídeo: ' + videoSelecionado.name;
+            const btn = document.createElement('button');
+            btn.innerText = 'x';
+            btn.type = 'button';
+            btn.style.marginLeft = '8px';
+            btn.style.background = '#e53935';
+            btn.style.color = '#fff';
+            btn.style.border = 'none';
+            btn.style.borderRadius = '50%';
+            btn.style.width = '20px';
+            btn.style.height = '20px';
+            btn.style.cursor = 'pointer';
+            btn.onclick = () => { videoSelecionado = null; document.getElementById('video-input').value = ''; atualizarPreviewVideo(); };
+            preview.appendChild(span);
+            preview.appendChild(btn);
+        }
+        document.getElementById('video-hidden').value = '';
+    }
+    // Ao enviar o formulário, monta um FormData manualmente para enviar múltiplos arquivos
+    document.querySelector('form').addEventListener('submit', function(e) {
+        if (imagensSelecionadas.length === 0) {
+            showModalAviso('Selecione pelo menos uma imagem!');
+            e.preventDefault();
+            return false;
+        }
+        const form = e.target;
+        const formData = new FormData(form);
+        formData.delete('imagens');
+        imagensSelecionadas.forEach(img => formData.append('imagens', img));
+        formData.delete('video');
+        if (videoSelecionado) formData.append('video', videoSelecionado);
+        // Envia via fetch para manter arquivos
+        e.preventDefault();
+        fetch(form.action, { method: form.method, body: formData })
+            .then(r => {
+                if (r.redirected) {
+                    // Produto cadastrado com sucesso, exibe modal!
+                    showModalAviso('Produto adicionado com sucesso!', () => window.location = r.url);
+                } else {
+                    r.text().then(showModalAviso);
+                }
+            })
+            .catch(err => showModalAviso('Erro ao enviar: ' + err));
+    });
+    // Função para obter o token CSRF do formulário
+    function getCSRFToken() {
+        const input = document.querySelector('input[name="csrf_token"]');
+        if (input) return input.value;
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) return meta.getAttribute('content');
+        return '';
+    }
+    document.querySelectorAll('.btn-remover').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            if(!id) return;
+            if(confirm('Deseja realmente remover este produto?')){
+                fetch(`/admin/produto/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    showModalAviso(data.message || data.error, () => location.reload());
+                })
+                .catch(err => showModalAviso('Erro ao remover: ' + err));
+            }
+        });
+    });
+    // Modal customizado para avisos
+    function showModalAviso(msg, cb) {
+        const modal = document.getElementById('modal-aviso');
+        const msgSpan = document.getElementById('modal-aviso-msg');
+        const btnFechar = document.getElementById('modal-aviso-fechar');
+        msgSpan.textContent = msg;
+        modal.style.display = 'flex';
+        btnFechar.onclick = function() {
+            modal.style.display = 'none';
+            if (cb) cb();
+        };
+    }
+    </script>
+</body>
+</html>

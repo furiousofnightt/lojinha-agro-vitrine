@@ -1,0 +1,44 @@
+<!-- Template para exibir os pedidos do usuário -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meus Pedidos  SUA-MARCA-AQUI</title>
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="stylesheet" href="/static/meus_pedidos.css">
+</head>
+<body>
+    <h1>Meus Pedidos</h1>
+    {% if pedidos %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Itens</th>
+                    <th>Valor Total</th>
+                    <th>Endereço</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos %}
+                <tr>
+                    <td>{{ pedido[0] }}</td>
+                    <td>{{ pedido[1] }}</td>
+                    <td>{{ pedido[2] }}</td>
+                    <td>{{ pedido[3] }}</td>
+                    <td>R$ {{ '%.2f'|format(pedido[4]) }}</td>
+                    <td>{{ pedido[5] }}, {{ pedido[6] }}-{{ pedido[7] }}, {{ pedido[8] }}</td>
+                    <td><a href="{{ url_for('detalhes_pedido', id=pedido[0]) }}">Ver detalhes</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Você ainda não fez nenhum pedido.</p>
+    {% endif %}
+    <a href="/">Voltar para a loja</a>
+</body>
+</html>

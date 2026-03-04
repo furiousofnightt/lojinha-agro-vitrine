@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho -  SUA-MARCA-AQUI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='carrinho.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+  {% if csrf_token %}
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  {% endif %}
+</head>
+<body>
+    <div class="tech-bg"></div>
+    <div class="voltar-wrap">
+      <a href="{{ url_for('produtos') }}" class="btn-voltar">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:7px;"><path d="M12.5 15L7.5 10L12.5 5" stroke="#FFD700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Voltar para produtos
+      </a>
+    </div>
+    <main class="carrinho-container">
+    <h1 class="carrinho-titulo">Meu Carrinho</h1>
+    {% if carrinho %}
+    <div class="carrinho-grid">
+      {% for item in carrinho %}
+      <div class="carrinho-card">
+        <div class="card-img-wrap">
+          {% if item['imagem'] %}
+            <img src="{{ url_for('static', filename=item['imagem'].replace('\\', '/')) }}" alt="{{ item['nome'] }}" class="card-img">
+          {% else %}
+            <img src="{{ url_for('static', filename='images/logo-index.png') }}" alt="Sem imagem" class="card-img">
+          {% endif %}
+        </div>
+        <div class="card-info">
+          <div class="card-title">{{ item['nome'] }}</div>
+          <div class="card-preco">R$ {{ item['preco'] }}</div>
+          <div class="card-qtd-wrap">
+            <form method="post" action="{{ url_for('atualizar_item_carrinho', item_id=item['id']) }}" class="qtd-form">
+              <input type="hidden" name="produto_id" value="{{ item['id'] }}">
+              <button type="submit" name="acao" value="diminuir" class="btn-qtd">-</button>
+              <span class="qtd">{{ item['quantidade'] }}</span>
+              <button type="submit" name="acao" value="aumentar" class="btn-qtd">+</button>
+            </form>
+          </div>
+          <div class="card-subtotal">Subtotal: <span>R$ {{ "%.2f"|format(item['subtotal']) }}</span></div>
+        </div>
+        <form method="post" action="{{ url_for('remover_do_carrinho', item_id=item['id']) }}" class="remover-form">
+          <input type="hidden" name="produto_id" value="{{ item['id'] }}">
+          <button type="submit" class="btn-remover" title="Remover do carrinho">&times;</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="carrinho-total-bar">
+      <span class="total-label">Total:</span>
+      <span class="total-valor">R$ {{ "%.2f"|format(total) }}</span>
+      <a href="{{ url_for('finalizar_compra') }}" class="btn-destaque">Finalizar Compra via WhatsApp</a>
+    </div>
+    <script>
+      // Função para obter o token CSRF do meta
+      function getCSRFToken() {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        return meta ? meta.getAttribute('content') : '';
+      }
+      // Atualizar quantidade via fetch (PUT)
+      document.querySelectorAll('.qtd-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const urlParts = this.action.split('/');
+          const itemId = urlParts[urlParts.length - 1];
+          const acao = e.submitter.value;
+          const qtdSpan = this.querySelector('.qtd');
+          let qtd = parseInt(qtdSpan.textContent);
+          let novaQtd = qtd;
+          if (acao === 'aumentar') novaQtd = qtd + 1;
+          if (acao === 'diminuir') novaQtd = qtd - 1;
+          if (novaQtd < 1) return;
+          fetch(`/carrinho/atualizar/${itemId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({ quantidade: novaQtd }),
+            credentials: 'same-origin'
+          })
+          .then(async res => {
+            if (res.ok) {
+              location.reload();
+            } else {
+              let msg = 'Erro ao atualizar';
+              try { const j = await res.json(); msg = j.error || msg; } catch {}
+              alert(msg);
+            }
+          });
+        });
+      });
+      // Remover item via fetch (DELETE)
+      document.querySelectorAll('.remover-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const urlParts = this.action.split('/');
+          const itemId = urlParts[urlParts.length - 1];
+          fetch(`/carrinho/remover/${itemId}`, {
+            method: 'DELETE',
+            headers: {
+              'X-CSRFToken': getCSRFToken()
+            },
+            credentials: 'same-origin'
+          })
+          .then(async res => {
+            if (res.ok) {
+              location.reload();
+            } else {
+              let msg = 'Erro ao remover';
+              try { const j = await res.json(); msg = j.error || msg; } catch {}
+              alert(msg);
+            }
+          });
+        });
+      });
+    </script>
+    {% else %}
+    <p class="carrinho-vazio">Seu carrinho está vazio.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
