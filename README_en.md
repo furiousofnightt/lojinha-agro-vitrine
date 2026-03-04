@@ -54,7 +54,7 @@ An e-commerce system specialized in agricultural products, animal feed, and supp
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/furiousofnightgames/lojinha-agro-vitrine.git
+git clone https://github.com/furiousofnightt/lojinha-agro-vitrine.git
 cd lojinha-agro
 ```
 
@@ -119,5 +119,5 @@ To report security vulnerabilities, please read our [Security Policy](SECURITY.m
 ## 📞 Support
 
 For support and questions:
-- Open an [issue](https://github.com/furiousofnightgames/lojinha-agro-vitrine/issues)
+- Open an [issue](https://github.com/furiousofnightt/lojinha-agro-vitrine/issues)
 - Check our [documentation](docs_importantes/)

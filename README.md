@@ -54,7 +54,7 @@ Sistema de e-commerce especializado em produtos agropecuários, rações e suple
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/furiousofnightgames/lojinha-agro-vitrine.git
+git clone https://github.com/furiousofnightt/lojinha-agro-vitrine.git
 cd lojinha-agro
 ```
 
